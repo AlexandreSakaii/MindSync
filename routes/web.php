@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PlanoController;
 
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -14,10 +15,11 @@ Route::get('Blog', function () {
     return view('Blog');
 });
 
-Route::get('Dashboard', function () {
-    return view('Dashboard');
-});
 
+
+Route::get('MenagerAuth', function () {
+    return view('MenagerAuth');
+});
 
 Route::get('/Planos', [PlanoController::class, 'index'])->name('planos.index');
 
