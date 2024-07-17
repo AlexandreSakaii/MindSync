@@ -8,16 +8,7 @@
 <!-- Navbar -->
 <x-navmenager></x-navmenager>
 
-
-
-<div class="flex ">
-    <h2 class="text-3xl font-extrabold dark:text-gray-900">Relatórios da clínica</h2>
-    <button type="button" class="text-white custom-bg-orange hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Acessar relatórios completos</button>
-</div>
-
-
-
-
+<br>
 <div class="grid grid-cols-4 max-h-[200px] gap-4">
 
     <!-- relatório de receita gerada -->
@@ -291,56 +282,20 @@
 <br>
 
 
+<button type="button" class="text-white custom-bg-orange hover:bg-orange-700 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-orange-600 dark:hover:bg-orange-700 focus:outline-none dark:focus:ring-orange-800">Acessar mais relatórios</button>
+<button type="button" id="openPsicologoModal" class="text-white custom-bg-orange hover:bg-orange-700 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-orange-600 dark:hover:bg-orange-700 focus:outline-none dark:focus:ring-orange-800">Criar psicólogos</button>
+<button type="button" id="openAssistenteModal" class="text-white custom-bg-orange hover:bg-orange-700 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-orange-600 dark:hover:bg-orange-700 focus:outline-none dark:focus:ring-orange-800">Criar assistente</button>
 
 
-
-
-<div class="flex justify-center items-center space-x-4">
-    <h2 class="text-3xl font-extrabold dark:text-gray-900">Psicólogos criados</h2>
-    <button type="button" id="openModalButton" class="text-white custom-bg-orange hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Criar psicólogos</button>
-</div>
-
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg ">
-    <table class="w-2/3 mx-auto text-sm text-left rtl:text-right text-blue-100 dark:text-blue-100">
-        <thead class="text-xs text-gray-800 uppercase custom-bg-orange border-b border-orange-800">
-        <tr>
-            <th scope="col" class="px-6 py-3 custom-bg-orange-claro">
-                Psicólogos criados
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Recuperação de senha
-            </th>
-            <th scope="col" class="px-6 py-3 custom-bg-orange-claro">
-                Exclusão de conta
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="custom-bg-orange border-b border-orange-800">
-            <th scope="row" class="px-6 py-4 font-medium custom-bg-orange-claro text-gray-800 whitespace-nowrap">
-                Apple MacBook Pro 17"
-            </th>
-            <td class="px-6 py-4 text-gray-800">
-                Silver
-            </td>
-            <td class="px-6 py-4 custom-bg-orange-claro">
-                <a href="#" class="font-medium text-red-700 hover:underline">Excluir</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-
-
-<div id="loginModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+<!-- Modal de Psicólogo -->
+<div id="PsicologoModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
     <div class="bg-white rounded-lg shadow dark:border sm:max-w-md dark:bg-gray-800 dark:border-gray-700">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
             <div class="flex justify-between items-center">
                 <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                     Criar conta de psicólogo
                 </h1>
-                <button id="closeModalButton" class="text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                <button id="closePsicologoModal" class="text-gray-400 hover:text-gray-900 dark:hover:text-white">
                     &times;
                 </button>
             </div>
@@ -357,11 +312,144 @@
                     <label for="confirm-password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Repita a senha</label>
                     <input type="password" name="confirm-password" id="confirm-password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="">
                 </div>
-                <button type="submit" class="w-full text-white custom-bg-orange hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Criar psicólogo</button>
+                <button type="submit" class="w-full text-white custom-bg-orange hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign in</button>
             </form>
         </div>
     </div>
 </div>
+
+<!-- Modal de Assistente -->
+<div id="AssistenteModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white rounded-lg shadow dark:border sm:max-w-md dark:bg-gray-800 dark:border-gray-700">
+        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                    Criar conta de assistente
+                </h1>
+                <button id="closeAssistenteModal" class="text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                    &times;
+                </button>
+            </div>
+            <form class="space-y-4 md:space-y-6" action="#">
+                <div>
+                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                    <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required="">
+                </div>
+                <div>
+                    <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Senha</label>
+                    <input type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="">
+                </div>
+                <div>
+                    <label for="confirm-password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Repita a senha</label>
+                    <input type="password" name="confirm-password" id="confirm-password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="">
+                </div>
+
+                <button id="dropdownCheckboxButton" data-dropdown-toggle="dropdownDefaultCheckbox" class="text-white custom-bg-orange  focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center  " type="button">Selecione os psicólogos <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+
+                <!-- Dropdown menu -->
+                <div id="dropdownDefaultCheckbox" class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
+                    <ul class="p-3 space-y-3 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownCheckboxButton">
+                        <li>
+                            <div class="flex items-center">
+                                <input id="checkbox-item-1" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                <label for="checkbox-item-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Dr Xanbola</label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <button type="submit" class="w-full text-white custom-bg-orange hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign in</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="grid grid-cols-2 mb-8 gap-4">
+    <div class="ml-4">
+        <div class="flex justify-center items-center space-x-4">
+            <h2 class="text-3xl font-extrabold dark:text-gray-900">Psicólogos criados</h2>
+        </div>
+
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg ">
+            <table class="w-full mx-auto text-sm text-left rtl:text-right text-blue-100 dark:text-blue-100">
+                <thead class="text-xs text-gray-800 uppercase custom-bg-orange border-b border-orange-800">
+                <tr>
+                    <th scope="col" class="px-6 py-3 custom-bg-orange-claro">
+                        Psicólogos criados
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Recuperação de senha
+                    </th>
+                    <th scope="col" class="px-6 py-3 custom-bg-orange-claro">
+                        Exclusão de conta
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="custom-bg-orange border-b border-orange-800">
+                    <th scope="row" class="px-6 py-4 font-medium custom-bg-orange-claro text-gray-800 whitespace-nowrap">
+                        Apple MacBook Pro 17"
+                    </th>
+                    <td class="px-6 py-4 text-gray-800">
+                        Silver
+                    </td>
+                    <td class="px-6 py-4 custom-bg-orange-claro">
+                        <a href="#" class="font-medium text-red-700 hover:underline">Excluir</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="mr-4">
+        <div class="flex justify-center items-center space-x-4">
+            <h2 class="text-3xl font-extrabold dark:text-gray-900">Assistentes criados</h2>
+        </div>
+
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg ">
+            <table class="w-full mx-auto text-sm text-left rtl:text-right text-blue-100 dark:text-blue-100">
+                <thead class="text-xs text-gray-800 uppercase custom-bg-orange border-b border-orange-800">
+                <tr>
+                    <th scope="col" class="px-6 py-3 custom-bg-orange-claro">
+                        Psicólogos criados
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Recuperação de senha
+                    </th>
+                    <th scope="col" class="px-6 py-3 custom-bg-orange-claro">
+                        Exclusão de conta
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="custom-bg-orange border-b border-orange-800">
+                    <th scope="row" class="px-6 py-4 font-medium custom-bg-orange-claro text-gray-800 whitespace-nowrap">
+                        Apple MacBook Pro 17"
+                    </th>
+                    <td class="px-6 py-4 text-gray-800">
+                        Silver
+                    </td>
+                    <td class="px-6 py-4 custom-bg-orange-claro">
+                        <a href="#" class="font-medium text-red-700 hover:underline">Excluir</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 
 
 
@@ -512,27 +600,43 @@
         chart.render();
     }
 
-    const openModalButton = document.getElementById('openModalButton');
-    const closeModalButton = document.getElementById('closeModalButton');
-    const loginModal = document.getElementById('loginModal');
 
-    openModalButton.addEventListener('click', () => {
-        loginModal.classList.remove('hidden');
+    const openPsicologoModalButton = document.getElementById('openPsicologoModal');
+    const openAssistenteModalButton = document.getElementById('openAssistenteModal');
+    const closePsicologoModalButton = document.getElementById('closePsicologoModal');
+    const closeAssistenteModalButton = document.getElementById('closeAssistenteModal');
+    const PsicologoModal = document.getElementById('PsicologoModal');
+    const AssistenteModal = document.getElementById('AssistenteModal');
+
+    // Abrir e fechar o modal de Psicólogo
+    openPsicologoModalButton.addEventListener('click', () => {
+        PsicologoModal.classList.remove('hidden');
     });
 
-    closeModalButton.addEventListener('click', () => {
-        loginModal.classList.add('hidden');
+    closePsicologoModalButton.addEventListener('click', () => {
+        PsicologoModal.classList.add('hidden');
     });
 
-    // Optional: Close modal when clicking outside of it
+    // Abrir e fechar o modal de Assistente
+    openAssistenteModalButton.addEventListener('click', () => {
+        AssistenteModal.classList.remove('hidden');
+    });
+
+    closeAssistenteModalButton.addEventListener('click', () => {
+        AssistenteModal.classList.add('hidden');
+    });
+
+    // Fechar o modal ao clicar fora dele
     window.addEventListener('click', (event) => {
-        if (event.target === loginModal) {
-            loginModal.classList.add('hidden');
+        if (event.target === PsicologoModal) {
+            PsicologoModal.classList.add('hidden');
+        }
+        if (event.target === AssistenteModal) {
+            AssistenteModal.classList.add('hidden');
         }
     });
 
 </script>
-
 
 
 
