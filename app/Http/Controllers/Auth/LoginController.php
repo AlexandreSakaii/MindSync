@@ -6,23 +6,25 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 
 class LoginController extends Controller
 {
     use AuthenticatesUsers;
 
-    protected $redirectTo = '/';
+    protected string $redirectTo = '/MenagerAuth'; // Declarando o tipo da propriedade
 
-    protected function authenticated(Request $request, $user): \Illuminate\Http\RedirectResponse
+    protected function authenticated(Request $request, $user): RedirectResponse // Declarando o tipo de retorno
     {
-        if ($user->is_superadmin) {
+        // Verifique se o usuário é uma instância de SuperAdmin
+        if ($user instanceof \App\Models\SuperAdmin) {
             return redirect()->intended('/SuperAdmMindSync');
         }
 
-       return redirect()->intended($this->redirectPath());
+        return redirect()->intended($this->redirectTo);
     }
 
-    public function logout(Request $request): \Illuminate\Http\RedirectResponse
+    public function logout(Request $request): RedirectResponse // Declarando o tipo de retorno
     {
         Auth::logout();
         $request->session()->invalidate();
@@ -31,9 +33,8 @@ class LoginController extends Controller
         return redirect('/');
     }
 
-    protected function redirectPath()
+    protected function redirectPath(): string // Declarando o tipo de retorno
     {
         return property_exists($this, 'redirectTo') ? $this->redirectTo : '/';
     }
-
 }

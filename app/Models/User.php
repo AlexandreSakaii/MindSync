@@ -26,6 +26,11 @@ class User extends Authenticatable
         'street',
         'number',
         'complement',
+        'card_number',
+        'card_expiration',
+        'cvv',
+        'plan_name',
+        'plan_value',
     ];
 
     protected $hidden = [

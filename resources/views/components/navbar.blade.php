@@ -49,19 +49,23 @@
                         </ul>
                     </div>
                 </li>
-                <li>
-                    <a href="#" id="login-button" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Entrar</a>
-                </li>
+                @if(!auth()->check())
+                    <li>
+                        <a href="#" id="login-button" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Entrar</a>
+                    </li>
+                @endif
             </ul>
-            <ul class="flex space-x-2 mt-1">
-                <li>
-                    <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-bold text-gray-900 rounded-lg group bg-gradient-to-br from-orange-200 via-orange-300 to-orange-400 group-hover:from-orange-200 group-hover:via-orange-300 group-hover:to-orange-400 dark:text-gray-700 dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-orange-100 dark:focus:ring-orange-400">
-                        <span class="relative px-5 py-2 transition-all ease-in duration-75 bg-white dark:bg-orange-200 rounded-md group-hover:bg-opacity-0">
-                           Experimente grátis
-                        </span>
-                    </button>
-                </li>
-            </ul>
+            @if(!auth()->check())
+                <ul class="flex space-x-2 mt-1">
+                    <li>
+                        <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-bold text-gray-900 rounded-lg group bg-gradient-to-br from-orange-200 via-orange-300 to-orange-400 group-hover:from-orange-200 group-hover:via-orange-300 group-hover:to-orange-400 dark:text-gray-700 dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-orange-100 dark:focus:ring-orange-400">
+                            <span class="relative px-5 py-2 transition-all ease-in duration-75 bg-white dark:bg-orange-200 rounded-md group-hover:bg-opacity-0">
+                                Experimente grátis
+                            </span>
+                        </button>
+                    </li>
+                </ul>
+            @endif
         </div>
     </div>
 </nav>

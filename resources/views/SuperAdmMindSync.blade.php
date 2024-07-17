@@ -39,20 +39,25 @@
                 <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                     Formulário de criação de cards
                 </h1>
-                <form class="space-y-4 md:space-y-6" action="#">
+                <form class="space-y-4 md:space-y-6" action="{{ route('cards.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
                     <div>
-                        <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Título</label>
-                        <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="máx 30 caracteres (recomendado)" required="">
+                        <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Título</label>
+                        <input type="text" name="title" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="máx 45 caracteres (recomendado)" required="">
                     </div>
                     <div class="mb-6">
-                        <label for="large-input" class="block mb-2 text-sm font-medium text-gray-900">Descrição</label>
-                        <input type="text" id="large-input" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500" placeholder="máx 115 caracteres (recomendado)" required="">
+                        <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Descrição</label>
+                        <input type="text" name="description" id="description" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500" placeholder="máx 110 caracteres (recomendado)" required="">
                     </div>
                     <div>
-                        <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Link</label>
-                        <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="www.materia.com" required="">
+                        <label for="link" class="block mb-2 text-sm font-medium text-gray-900">Link</label>
+                        <input type="url" name="link" id="link" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="www.materia.com" required="">
                     </div>
-                    <button type="submit" class="w-full text-black custom-bg-orange hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign in</button>
+
+                    <label class="block mb-2 text-sm font-medium text-gray-900" for="image">Apenas imagens 380px(w) / 200px(h) .Webp</label>
+                    <input class="block w-full text-lg text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="image" type="file" name="image" required>
+
+                    <button type="submit" class="w-full text-black custom-bg-orange hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Criar card</button>
                 </form>
             </div>
         </div>
