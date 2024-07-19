@@ -12,7 +12,7 @@ class CreatePlanosTable extends Migration
             $table->id();
             $table->string('nome');
             $table->string('descricao');
-            $table->integer('quantidade_psicologos');
+            $table->integer('quantidadePsicologos');
             $table->decimal('valor', 8, 2);
             $table->timestamps();
         });

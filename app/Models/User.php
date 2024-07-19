@@ -31,6 +31,7 @@ class User extends Authenticatable
         'cvv',
         'plan_name',
         'plan_value',
+        'quantidadePsicologos',
     ];
 
     protected $hidden = [

@@ -6,22 +6,40 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    public function showRegistrationForm()
+    public function showRegistrationForm(Request $request)
     {
-        return view('auth.register');
+        $nome = $request->input('nome');
+        $valor = $request->input('valor');
+        $quantidadePsicologos = $request->input('quantidade_psicologos');
+
+        return view('auth.register', compact('nome', 'valor', 'quantidadePsicologos'));
     }
 
     public function register(Request $request)
     {
-        $this->validator($request->all())->validate();
+        Log::info('Register request received', ['request' => $request->all()]);
 
-        $user = $this->create($request->all());
+        try {
+            $this->validator($request->all())->validate();
+        } catch (\Exception $e) {
+            Log::error('Validation failed', ['errors' => $e->getMessage()]);
+            return back()->withErrors($e->validator->errors());
+        }
 
-        return redirect($this->redirectTo());
+        try {
+            $user = $this->create($request->all());
+            Log::info('User created successfully', ['user' => $user]);
+        } catch (\Exception $e) {
+            Log::error('User creation failed', ['exception' => $e->getMessage()]);
+            return back()->with('error', 'Failed to create user');
+        }
+
+        return redirect($this->redirectTo())->with('status', 'User created successfully');
     }
 
     protected function validator(array $data)
@@ -47,12 +65,15 @@ class RegisterController extends Controller
             'cvv' => ['required', 'string', 'max:4'],
             'plan_name' => ['required', 'string', 'max:255'],
             'plan_value' => ['required', 'numeric'],
+            'quantidadePsicologos' => ['required', 'numeric'],
         ]);
     }
 
     protected function create(array $data)
     {
-        return User::create([
+        Log::info('Creating user with data', ['data' => $data]);
+
+        $user = User::create([
             'email' => $data['email'],
             'clinic_name' => $data['clinic_name'],
             'cnpj' => $data['cnpj'],
@@ -73,7 +94,12 @@ class RegisterController extends Controller
             'cvv' => Hash::make($data['cvv']),
             'plan_name' => $data['plan_name'],
             'plan_value' => $data['plan_value'],
+            'quantidadePsicologos' => $data['quantidadePsicologos'],
         ]);
+
+        Log::info('User creation successful', ['user' => $user]);
+
+        return $user;
     }
 
     protected function redirectTo()

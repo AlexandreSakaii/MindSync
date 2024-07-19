@@ -24,8 +24,8 @@
                         <input type="text" name="descricao" id="descricao" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500" placeholder="máx 200 caracteres (recomendado)" required>
                     </div>
                     <div>
-                        <label for="quantidade_psicologos" class="block mb-2 text-sm font-medium text-gray-900">Quantidade de psicólogos do plano</label>
-                        <input type="number" name="quantidade_psicologos" id="quantidade_psicologos" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="1 2 3 4 5..." required>
+                        <label for="quantidadePsicologos" class="block mb-2 text-sm font-medium text-gray-900">Quantidade de psicólogos do plano</label>
+                        <input type="number" name="quantidadePsicologos" id="quantidadePsicologos" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="1 2 3 4 5..." required>
                     </div>
                     <div>
                         <label for="valor" class="block mb-2 text-sm font-medium text-gray-900">Valor do plano</label>

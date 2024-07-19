@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->string('cvv')->nullable();
             $table->string('plan_name')->nullable();
             $table->decimal('plan_value', 10, 2)->nullable();
+            $table->integer('quantidadePsicologos')->nullable();
             $table->boolean('is_superadmin')->default(false);
             $table->rememberToken();
             $table->timestamps();
@@ -41,4 +42,3 @@ class CreateUsersTable extends Migration
         Schema::dropIfExists('users');
     }
 }
-

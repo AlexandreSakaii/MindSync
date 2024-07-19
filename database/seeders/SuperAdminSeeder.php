@@ -33,6 +33,7 @@ class SuperAdminSeeder extends Seeder
             'cvv' => '123',
             'plan_name' => 'Default Plan',
             'plan_value' => 0.00,
+            'quantidadePsicologos' => '1',
         ]);
     }
 }

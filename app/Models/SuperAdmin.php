@@ -10,6 +10,8 @@ class SuperAdmin extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    protected $table = 'users';
+
     protected $guarded = [];
 
     protected $hidden = [

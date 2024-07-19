@@ -28,7 +28,7 @@
                                 <svg class="h-6 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
                                 </svg>
-                                Acesso para {{ $plano->quantidade_psicologos }} psicólogos
+                                Acesso para {{ $plano->quantidadePsicologos }} psicólogos
                             </li>
                             <li class="flex gap-x-3">
                                 <svg class="h-6 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -57,7 +57,7 @@
                                 <span class="text-5xl font-bold tracking-tight text-gray-900">R${{ $plano->valor }}</span>
                                 <span class="text-sm font-semibold leading-6 tracking-wide text-gray-600">USD</span>
                             </p>
-                            <a href="{{ route('mindSyncPayment', ['nome' => $plano->nome, 'valor' => $plano->valor]) }}" class="mt-10 block w-full rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get access</a>
+                            <a href="{{ route('MindSyncPayment', ['nome' => $plano->nome, 'quantidadePsicologos' => $plano->quantidadePsicologos, 'valor' => $plano->valor]) }}" class="mt-10 block w-full rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Obter acesso</a>
                             <p class="mt-6 text-xs leading-5 text-gray-600">Invoices and receipts available for easy company reimbursement</p>
                         </div>
                     </div>

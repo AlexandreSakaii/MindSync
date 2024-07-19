@@ -12,7 +12,7 @@ class Plano extends Model
     protected $fillable = [
         'nome',
         'descricao',
-        'quantidade_psicologos',
+        'quantidadePsicologos',
         'valor',
     ];
 }

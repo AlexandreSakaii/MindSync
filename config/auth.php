@@ -11,20 +11,32 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
         'superadmin' => [
             'driver' => 'session',
             'provider' => 'superadmins',
+        ],
+
+        'psychologist' => [
+            'driver' => 'session',
+            'provider' => 'psychologists',
         ],
     ],
 
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\User::class,
         ],
+
         'superadmins' => [
             'driver' => 'eloquent',
-            'model' => App\Models\SuperAdmin::class,
+            'model' => App\Models\User::class,
+        ],
+
+        'psychologists' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Psychologist::class,
         ],
     ],
 
@@ -35,8 +47,19 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+        'psychologists' => [
+            'provider' => 'psychologists',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'superadmins' => [
+            'provider' => 'superadmins',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
     ],
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 ];
-

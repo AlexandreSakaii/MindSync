@@ -12,7 +12,7 @@ class PlanoController extends Controller
         $validatedData = $request->validate([
             'nome' => 'required|string|max:30',
             'descricao' => 'required|string|max:200',
-            'quantidade_psicologos' => 'required|integer',
+            'quantidadePsicologos' => 'required|integer',
             'valor' => 'required|numeric',
         ]);
 
@@ -26,4 +26,13 @@ class PlanoController extends Controller
         $planos = Plano::all();
         return view('Planos', compact('planos'));
     }
+    public function mindSyncPayment(Request $request)
+    {
+        $nome = $request->query('nome');
+        $valor = $request->query('valor');
+        $quantidadePsicologos = $request->query('quantidadePsicologos');
+
+        return view('MindSyncPayment', compact('nome', 'quantidadePsicologos', 'valor'));
+    }
+
 }
