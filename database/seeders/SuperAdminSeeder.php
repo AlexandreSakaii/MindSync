@@ -27,14 +27,9 @@ class SuperAdminSeeder extends Seeder
             'street' => 'Default Street',
             'number' => '000',
             'complement' => 'Default Complement',
-            'card_name' => 'Super',
-            'card_number' => '0000-0000-0000-0000',
-            'card_expiration' => '12/25',
-            'cvv' => '123',
             'plan_name' => 'Default Plan',
             'plan_value' => 0.00,
-            'quantidadePsicologos' => '1',
+            'quantidadePsicologos' => '100',
         ]);
     }
 }
-

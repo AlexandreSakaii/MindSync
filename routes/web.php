@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PlanoController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\PsychologistController;
+use App\Http\Controllers\ConfigController;
+
 
 Route::group(['middleware' => ['web']], function () {
     Route::get('/', function () {
@@ -31,10 +33,20 @@ Route::group(['middleware' => ['web']], function () {
         })->name('deshboard');
     });
 
+
     Route::middleware(['auth'])->group(function () {
         Route::get('/MenagerAuth', [PsychologistController::class, 'index'])->name('menager.auth');
         Route::post('/psychologists', [PsychologistController::class, 'create'])->name('psychologists.create');
+        Route::get('/Configuracao', [ConfigController::class, 'showConfig'])->name('configuracao');
+        Route::post('/update-email', [ConfigController::class, 'updateEmail'])->name('config.update.email');
+        Route::post('/update-password', [ConfigController::class, 'updatePassword'])->name('config.update.password');
+        Route::post('/add-payment-method', [ConfigController::class, 'addPaymentMethod'])->name('config.add.payment_method');
+        Route::post('/update-clinic-data', [ConfigController::class, 'updateClinicData'])->name('config.update.clinic_data');
+        Route::post('/update-clinic-address', [ConfigController::class, 'updateClinicAddress'])->name('config.update.clinic_address');
+
     });
+
+
 
     Route::middleware(['auth:superadmin'])->group(function () {
         Route::get('/SuperAdmMindSync', function () {

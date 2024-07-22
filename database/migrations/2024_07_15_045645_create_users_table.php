@@ -24,10 +24,6 @@ class CreateUsersTable extends Migration
             $table->string('street')->nullable();
             $table->string('number')->nullable();
             $table->string('complement')->nullable();
-            $table->string('card_name')->nullable();
-            $table->string('card_number')->nullable();
-            $table->string('card_expiration')->nullable();
-            $table->string('cvv')->nullable();
             $table->string('plan_name')->nullable();
             $table->decimal('plan_value', 10, 2)->nullable();
             $table->integer('quantidadePsicologos')->nullable();
