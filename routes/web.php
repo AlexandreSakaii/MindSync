@@ -47,7 +47,11 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/session-times', [SessionTimeController::class, 'getSessionTimes'])->name('sessionTimes.get');
 
         Route::post('/sessions', [SessionController::class, 'store'])->name('sessions.store');
+        Route::put('/sessions/{id}', [SessionController::class, 'update'])->name('sessions.update');
+        Route::delete('/sessions/{id}', [SessionController::class, 'destroy'])->name('sessions.destroy');
         Route::get('/sessions/by-date', [SessionController::class, 'getSessionsByDate'])->name('sessions.by-date');
+        Route::get('sessoes', function () {return view('sessoes');});
+
     });
 
 

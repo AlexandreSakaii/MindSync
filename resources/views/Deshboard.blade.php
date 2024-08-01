@@ -1,8 +1,64 @@
 <!doctype html>
 <html>
-<x-Heading></x-Heading>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<body>
+    @vite('resources/css/app.css')
+
+    <title>MindSync ERP software</title>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+    <style>
+        .custom-bg-orange {
+            background-color: #FF9900;
+        }
+
+        .custom-bg-orange-claro {
+            background-color: #ffb848;
+        }
+
+    </style>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
+
+    <style>
+        .float{
+            position:fixed;
+            width:60px;
+            height:60px;
+            bottom:40px;
+            right:40px;
+            background-color:#25d366;
+            color:#FFF;
+            border-radius:50px;
+            text-align:center;
+            font-size:30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index:100;
+        }
+        .my-float{
+            margin-top:16px;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+
+
+</head>
+
+<body class="bg-gray-200">
 <x-nav-psicologo></x-nav-psicologo>
 <x-wpp></x-wpp>
 
@@ -18,15 +74,14 @@
                 <div class="grid grid-cols-7 gap-2 p-4" id="calendar">
                     <!-- Calendar Days Go Here -->
                 </div>
-                <div id="myModal" class="modal hidden fixed inset-0 flex items-center justify-center z-50">
+                <div id="myModal" class="modal hidden fixed inset-0 flex overflow-y-auto items-center justify-center z-50">
                     <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
-                    <div class="modal-container bg-white w-1/2 mx-auto rounded shadow-lg z-50 overflow-y-auto">
-                        <div class="modal-content  py-4 text-left px-6">
-
-                            <div class="flex justify-between items-center pb-3">
-                                <p class="text-2xl font-bold">Agenda</p>
-                                <div id="modalDate" class="text-xl font-semibold"></div>
-                                <button id="closeModal" class="modal-close px-3 py-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring">✕</button>
+                    <div class="modal-container bg-white dark:bg-gray-700 w-1/2 mx-auto rounded-lg shadow-lg z-50">
+                        <div class="modal-content py-4 text-left px-6">
+                            <div class="flex justify-between items-center pb-3 border-b dark:border-gray-600">
+                                <p class="text-2xl font-bold text-gray-900 dark:text-white">Agenda</p>
+                                <div id="modalDate" class="text-xl font-semibold text-gray-900 dark:text-white"></div>
+                                <button id="closeModal" class="modal-close px-3 py-1 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-orange-300 dark:focus:ring-orange-800 text-gray-900 dark:text-white">✕</button>
                             </div>
 
                             <div class="grid grid-cols-2 gap-2">
@@ -50,14 +105,14 @@
                                     </div>
 
                                     <form class="mt-4 mx-auto">
-                                        <label for="default-search" class=" text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                                        <label for="default-search" class="text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                                         <div class="relative">
                                             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                                 <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                                                 </svg>
                                             </div>
-                                            <input type="search" id="patient-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nome do paciente" required />
+                                            <input type="search" id="patient-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-orange-600 focus:border-orange-600 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Nome do paciente" required />
                                         </div>
                                         <div id="search-results" class="mt-2 hidden w-80 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 absolute z-10"></div>
                                     </form>
@@ -69,7 +124,7 @@
                                                 <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400" d="M6.5 0a.5.5 0 0 0 0 1H7v1.07a7.001 7.001 0 0 0-3.273 12.474l-.602.602a.5.5 0 0 0 .707.708l.746-.746A6.97 6.97 0 0 0 8 16a6.97 6.97 0 0 0 3.422-.892l.746.746a.5.5 0 0 0 .707-.708l-.601-.602A7.001 7.001 0 0 0 9 2.07V1h.5a.5.5 0 0 0 0-1zm1.038 3.018a6 6 0 0 1 .924 0 6 6 0 1 1-.924 0M0 3.5c0 .753.333 1.429.86 1.887A8.04 8.04 0 0 1 4.387 1.86 2.5 2.5 0 0 0 0 3.5M13.5 1c-.753 0-1.429.333-1.887.86a8.04 8.04 0 0 1 3.527 3.527A2.5 2.5 0 0 0 13.5 1"/>
                                             </svg>
                                         </div>
-                                        <input id="start_time" name="start_time" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Horário da consulta" required />
+                                        <input id="start_time" name="start_time" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-orange-600 focus:border-orange-600 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Horário da consulta" required />
                                     </div>
 
                                     <button id="dropdownSessionTimeButton" data-dropdown-toggle="dropdownSessionTime" class="text-white w-full mt-4 justify-center h-12 bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-orange-600 dark:hover:bg-orange-700 dark:focus:ring-orange-800" type="button">Tempo da sessão
@@ -91,9 +146,9 @@
                                 </div>
 
                                 <div class="mt-4">
-                                    <a href="#" class="block h-[251px] p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                                    <a href="#" class="block h-[251px] p-6 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700">
                                         <h5 class="mb-2 mt-4 ml-4 text-lg font-bold tracking-tight text-gray-900 dark:text-white">Horários com sessões marcadas</h5>
-                                        <div id="scheduled-sessions" class="grid grid-cols-2 ml-4 gap-4">
+                                        <div id="scheduled-sessions-list" class="grid grid-cols-2 ml-4 gap-4">
                                             <!-- Horários das sessões marcadas vão aqui -->
                                         </div>
                                     </a>
@@ -110,47 +165,31 @@
                                 <input type="hidden" id="session_time" name="session_time">
                                 <input type="hidden" id="date" name="date">
                                 <input type="hidden" id="start_time" name="start_time">
-                                <button type="submit" class="w-full mt-2 bg-orange-600 hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300 text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center">Cadastrar sessão</button>
+                                <button type="submit" class="w-full mt-2 bg-orange-600 hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300 text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-orange-600 dark:hover:bg-orange-700 dark:focus:ring-orange-800">Cadastrar sessão</button>
+                                <div id="error-message" class="text-red-600 mt-2 hidden"></div>
                             </form>
 
 
-                            <div class="relative  w-full mt-4 overflow-x-auto shadow-md sm:rounded-lg">
+                            <div class="relative w-full mt-4 overflow-x-auto shadow-md sm:rounded-lg">
                                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-800 dark:text-gray-400">
                                     <tr>
-                                        <th scope="col" class="px-6 py-3">
+                                        <th scope="col" class="px-6 py-3 border-b border-gray-300 dark:border-gray-600">
                                             Sessões de hoje
                                         </th>
-                                        <th scope="col" class="px-6 py-3">
+                                        <th scope="col" class="px-6 py-3 border-b border-gray-300 dark:border-gray-600">
                                             Horário
                                         </th>
-                                        <th scope="col" class="px-6 py-3">
+                                        <th scope="col" class="px-6 py-3 border-b border-gray-300 dark:border-gray-600">
                                             Telefone do paciente
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Configurar
                                         </th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            {nome do paciente}
-                                        </th>
-                                        <td class="px-6 py-4">
-                                            {Horário da consulta}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {número do telefone do apciente}
-                                        </td>
-                                        <td class="px-6 py-4 text-right">
-                                            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Editar</a>
-                                        </td>
-                                    </tr>
+                                    <tbody id="scheduled-sessions-table-body">
+                                    <!-- Sessões marcadas vão aqui -->
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -192,7 +231,7 @@
 
 <div class="relative ml-48 w-[1128px] overflow-x-auto shadow-md sm:rounded-lg">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-800 dark:text-gray-400">
         <tr>
             <th scope="col" class="px-6 py-3">
                 Sessões de hoje
@@ -203,35 +242,14 @@
             <th scope="col" class="px-6 py-3">
                 Telefone do paciente
             </th>
-            <th scope="col" class="px-6 py-3">
-                Atendimento
-            </th>
-            <th scope="col" class="px-6 py-3">
-                <span class="sr-only">Edit</span>
-            </th>
         </tr>
         </thead>
-        <tbody>
-        <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                {nome do paciente}
-            </th>
-            <td class="px-6 py-4">
-                {Horário da consulta}
-            </td>
-            <td class="px-6 py-4">
-                {número do telefone do apciente}
-            </td>
-            <td class="px-6 py-4 text-left">
-                <a href="#" class="font-medium text-orange-500 hover:underline">Iniciar sessão</a>
-            </td>
-            <td class="px-6 py-4 text-right">
-                <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Editar</a>
-            </td>
-        </tr>
+        <tbody id="today-sessions-table-body">
+        <!-- Sessões de hoje vão aqui -->
         </tbody>
     </table>
 </div>
+
 
 <!-- Main modal -->
 <div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 overflow-y-auto overflow-x-hidden flex items-center justify-center w-full h-full bg-black bg-opacity-50">
@@ -288,6 +306,107 @@
     </div>
 </div>
 
+
+<!-- Main modal -->
+<div id="edit-session-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center bg-gray-800 justify-between p-4 md:p-5 border-b rounded-t-lg dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Editar sessão
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="edit-session-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="grid p-4 grid-cols-2 gap-2">
+                <div>
+                    <!-- Dropdown para tipos de sessão -->
+                    <button id="dropdownSessionTypeButton1" data-dropdown-toggle="dropdownSessionType1" class="text-white w-full mt-4 justify-center h-12 bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-orange-600 dark:hover:bg-orange-700 dark:focus:ring-orange-800" type="button">Tipo de sessão
+                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </button>
+                    <!-- Dropdown menu para tipos de sessão -->
+                    <div id="dropdownSessionType1" class="z-10 hidden w-80 bg-gray-600 divide-y divide-gray-100 rounded-lg shadow absolute mt-2">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSessionTypeButton">
+                            @foreach ($sessionTypes as $sessionType)
+                                <li class="flex items-center p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg">
+                                    <input type="checkbox" class="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 me-2 checkbox-item session-type-item">
+                                    <span class="text-white dark:text-white">{{ $sessionType->name }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                    <form class="mt-4 mx-auto">
+                        <label for="default-search" class="text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </svg>
+                            </div>
+                            <input type="search" id="edit-patient-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nome do paciente" required />
+                        </div>
+                        <div id="edit-search-results" class="mt-2 hidden w-80 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 absolute z-10"></div>
+                    </form>
+
+                    <div class="relative mt-4">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-alarm" viewBox="0 0 16 16">
+                                <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400" d="M8.5 5.5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9z"/>
+                                <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400" d="M6.5 0a.5.5 0 0 0 0 1H7v1.07a7.001 7.001 0 0 0-3.273 12.474l-.602.602a.5.5 0 0 0 .707.708l.746-.746A6.97 6.97 0 0 0 8 16a6.97 6.97 0 0 0 3.422-.892l.746.746a.5.5 0 0 0 .707-.708l-.601-.602A7.001 7.001 0 0 0 9 2.07V1h.5a.5.5 0 0 0 0-1zm1.038 3.018a6 6 0 0 1 .924 0 6 6 0 1 1-.924 0M0 3.5c0 .753.333 1.429.86 1.887A8.04 8.04 0 0 1 4.387 1.86 2.5 2.5 0 0 0 0 3.5M13.5 1c-.753 0-1.429.333-1.887.86a8.04 8.04 0 0 1 3.527 3.527A2.5 2.5 0 0 0 13.5 1"/>
+                            </svg>
+                        </div>
+                        <input id="edit-start_time" name="start_time" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Horário da consulta" required />
+                    </div>
+
+                    <button id="dropdownSessionTimeButton1" data-dropdown-toggle="dropdownSessionTime1" class="text-white w-full mt-4 justify-center h-12 bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-orange-600 dark:hover:bg-orange-700 dark:focus:ring-orange-800" type="button">Tempo da sessão
+                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <div id="dropdownSessionTime1" class="z-10 hidden w-80 bg-gray-600 divide-y divide-gray-100 rounded-lg shadow absolute mt-2 top-0 translate-y-full">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSessionTimeButton">
+                            @foreach ($sessionTimes as $sessionTime)
+                                <li class="flex items-center p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg">
+                                    <input type="checkbox" class="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 me-2 checkbox-item session-time-item">
+                                    <span class="text-white dark:text-white">{{ $sessionTime->time_in_minutes }} minutos</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a href="#" class="block h-[251px] p-6 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700 ">
+                        <h5 class="mb-2 mt-4  text-lg font-bold tracking-tight text-gray-900 dark:text-white">Dados da sessão</h5>
+                        <p class="text-white" id="edit-patient-name">{nome do paciente}</p>
+                        <p class="text-white" id="edit-session-type">{tipo da sessão}</p>
+                        <p class="text-white" id="edit-session-start-time">{Horário da sessão}</p>
+                        <p class="text-white" id="edit-session-duration">{tempo da sessão}</p>
+                    </a>
+                </div>
+            </div>
+            <a href="#" id="edit-summary-container" class="hidden block w-full mt-4 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                <h5 class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">Resumo do agendamento</h5>
+                <p id="edit-summary" class="font-normal text-gray-700 dark:text-gray-400">Tipo de atendimento: {tipo de sessão}, pacientes: {nome dos pacientes}, dia: {data}, horário: {horário}</p>
+            </a>
+            <div class="flex items-center bg-gray-800  p-4 md:p-5 border-t border-gray-200 rounded-b-lg dark:border-gray-600">
+                <button data-modal-hide="edit-session-modal" type="button" class="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-orange-600 dark:hover:bg-orange-700 dark:focus:ring-orange-800">Atualizar</button>
+                <button data-modal-hide="edit-session-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-white focus:outline-none bg-red-600 rounded-lg border border-red-600 hover:bg-red-700 hover:text-white focus:z-10 focus:ring-4 focus:ring-red-100 dark:focus:ring-red-700 dark:bg-red-600 dark:text-white dark:border-red-600 dark:hover:bg-red-700">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
 
@@ -364,6 +483,176 @@
         generateCalendar(currentYear, currentMonth);
     });
 
+    document.getElementById('sessionForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const errorMessageElement = document.getElementById('error-message');
+        errorMessageElement.classList.add('hidden');
+
+        const sessionType = document.getElementById('session_type').value;
+        const startTime = document.getElementById('start_time').value;
+        const sessionTime = document.getElementById('session_time').value;
+        const patientIds = document.getElementById('patient_ids').value;
+        const date = document.getElementById('date').value;
+
+        console.log({ sessionType, startTime, sessionTime, patientIds, date });
+
+        // Verificar se os campos estão vazios e exibir mensagens de erro apropriadas
+        if (!sessionType) {
+            errorMessageElement.textContent = 'O campo tipo de sessão é obrigatório.';
+            errorMessageElement.classList.remove('hidden');
+            return;
+        }
+
+        if (!startTime) {
+            errorMessageElement.textContent = 'O campo horário de início é obrigatório.';
+            errorMessageElement.classList.remove('hidden');
+            return;
+        }
+
+        if (!sessionTime) {
+            errorMessageElement.textContent = 'O campo tempo de sessão é obrigatório.';
+            errorMessageElement.classList.remove('hidden');
+            return;
+        }
+
+        if (!patientIds) {
+            errorMessageElement.textContent = 'O campo pacientes é obrigatório.';
+            errorMessageElement.classList.remove('hidden');
+            return;
+        }
+
+        if (!date) {
+            errorMessageElement.textContent = 'O campo data é obrigatório.';
+            errorMessageElement.classList.remove('hidden');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.set('session_type', sessionType);
+        formData.set('start_time', startTime);
+        formData.set('session_time', sessionTime);
+        formData.set('patient_ids', patientIds);
+        formData.set('date', date);
+
+        fetch('/sessions', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            }
+        }).then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.message || 'Erro ao criar a sessão');
+                });
+            }
+            return response.json();
+        }).then(data => {
+            if (data.success) {
+                console.log('Sessão criada com sucesso');
+                updateScheduledSessions(new Date(document.getElementById('date').value));
+                hideModal();
+            } else {
+                console.log('Falha ao criar a sessão:', data);
+            }
+        }).catch(error => {
+            console.error('Erro:', error);
+            errorMessageElement.textContent = error.message;
+            errorMessageElement.classList.remove('hidden');
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fetch and display today's sessions when the page loads
+        const today = new Date();
+        updateTodaySessions(today);
+    });
+
+    function updateTodaySessions(today) {
+        const date = today.toISOString().split('T')[0];
+        fetch(`/sessions/by-date?date=${date}`)
+            .then(response => response.json())
+            .then(data => {
+                const todaySessionsTableBody = document.getElementById('today-sessions-table-body');
+                todaySessionsTableBody.innerHTML = '';
+
+                console.log('Sessões de hoje:', data); // Adicionar mensagem de depuração
+
+                if (data.length > 0) {
+                    data.forEach(session => {
+                        const row = document.createElement('tr');
+                        row.classList.add('bg-white', 'dark:bg-gray-700', 'hover:bg-gray-50', 'dark:hover:bg-gray-600');
+
+                        const nameCell = document.createElement('th');
+                        nameCell.scope = 'row';
+                        nameCell.classList.add('px-6', 'py-4', 'font-medium', 'text-gray-900', 'whitespace-nowrap', 'dark:text-white');
+                        nameCell.textContent = session.patient_name;
+
+                        const timeCell = document.createElement('td');
+                        timeCell.classList.add('px-6', 'py-4');
+                        timeCell.textContent = `${session.start_time} - ${session.end_time}`;
+
+                        const phoneCell = document.createElement('td');
+                        phoneCell.classList.add('px-6', 'py-4');
+                        phoneCell.textContent = session.patient_phone;
+
+                        const startLinkCell = document.createElement('td');
+                        startLinkCell.classList.add('px-6', 'py-4', 'text-left');
+                        const startLink = document.createElement('a');
+                        startLink.href = '#';
+                        startLink.classList.add('font-medium', 'text-orange-500', 'hover:underline');
+                        startLink.textContent = 'Iniciar sessão';
+                        startLinkCell.appendChild(startLink);
+
+                        const editLinkCell = document.createElement('td');
+                        editLinkCell.classList.add('px-6', 'py-4', 'text-right');
+                        const editLink = document.createElement('a');
+                        editLink.href = '#';
+                        editLink.classList.add('font-medium', 'text-blue-600', 'dark:text-orange-600', 'hover:underline', 'edit-button');
+                        editLink.dataset.sessionId = session.id;
+                        editLink.dataset.patientName = session.patient_name;
+                        editLink.dataset.sessionType = session.session_type;
+                        editLink.dataset.startTime = session.start_time;
+                        editLink.dataset.sessionDuration = session.session_duration;
+                        editLink.textContent = 'Editar';
+                        editLinkCell.appendChild(editLink);
+
+                        row.appendChild(nameCell);
+                        row.appendChild(timeCell);
+                        row.appendChild(phoneCell);
+                        row.appendChild(startLinkCell);
+                        row.appendChild(editLinkCell);
+
+                        todaySessionsTableBody.appendChild(row);
+                    });
+
+                    // Add event listeners for newly created edit buttons
+                    document.querySelectorAll('#today-sessions-table-body .edit-button').forEach(button => {
+                        button.addEventListener('click', handleEditButtonClick);
+                    });
+                } else {
+                    const noDataRow = document.createElement('tr');
+                    noDataRow.classList.add('bg-white', 'dark:bg-gray-800', 'hover:bg-gray-50', 'dark:hover:bg-gray-600');
+                    const noDataCell = document.createElement('td');
+                    noDataCell.colSpan = 5;
+                    noDataCell.classList.add('px-6', 'py-4', 'font-medium', 'text-gray-900', 'whitespace-nowrap', 'dark:text-white', 'text-center');
+                    noDataCell.textContent = 'Nenhuma sessão marcada';
+                    noDataRow.appendChild(noDataCell);
+                    todaySessionsTableBody.appendChild(noDataRow);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching today\'s sessions:', error);
+                const todaySessionsTableBody = document.getElementById('today-sessions-table-body');
+                todaySessionsTableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">Erro ao carregar as sessões</td></tr>';
+            });
+    }
+
+
     function showModal(formattedDate, selectedDate) {
         const modal = document.getElementById('myModal');
         const modalDateElement = document.getElementById('modalDate');
@@ -372,20 +661,24 @@
         document.getElementById('date').value = selectedDate.toISOString().split('T')[0];
 
         modal.classList.remove('hidden');
+        modal.classList.add('fixed', 'inset-0', 'flex', 'items-center', 'justify-center');
+        document.body.classList.add('overflow-hidden'); // Prevent background scrolling
     }
 
     function hideModal() {
         const modal = document.getElementById('myModal');
         modal.classList.add('hidden');
+        modal.classList.remove('fixed', 'inset-0', 'flex', 'items-center', 'justify-center');
+        document.body.classList.remove('overflow-hidden'); // Re-enable background scrolling
     }
 
     document.getElementById('closeModal').addEventListener('click', () => {
         hideModal();
     });
 
-    document.getElementById('patient-search').addEventListener('input', function() {
+    document.getElementById('edit-patient-search').addEventListener('input', function() {
         const query = this.value;
-        const resultsDiv = document.getElementById('search-results');
+        const resultsDiv = document.getElementById('edit-search-results');
 
         if (query.length > 0) {
             fetch(`/patients/search?query=${query}`)
@@ -436,24 +729,48 @@
         const date = document.getElementById('date').value;
         const startTime = document.getElementById('start_time').value;
 
+        const summaryContainer = document.getElementById('summary-container');
+        const summary = document.getElementById('summary');
+
         if (sessionType || sessionTime || patients.length > 0 || date || startTime) {
-            document.getElementById('summary-container').classList.remove('hidden');
+            summaryContainer.classList.remove('hidden');
         } else {
-            document.getElementById('summary-container').classList.add('hidden');
+            summaryContainer.classList.add('hidden');
         }
 
-        const patientIds = patients.map(patient => patient.id).join(',');
         const patientNames = patients.map(patient => patient.name).join(', ');
 
         document.getElementById('session_type').value = sessionType ? sessionType.nextElementSibling.textContent.trim() : '';
         document.getElementById('session_time').value = sessionTime ? sessionTime.nextElementSibling.textContent.trim().split(' ')[0] : '';
-        document.getElementById('patient_ids').value = patientIds;
+        document.getElementById('patient_ids').value = patients.map(patient => patient.id).join(',');
 
-        document.getElementById('summary').textContent = `Tipo de atendimento: ${sessionType ? sessionType.nextElementSibling.textContent.trim() : ''}, pacientes: ${patientNames}, dia: ${date}, horário: ${startTime}`;
+        summary.textContent = `Tipo de atendimento: ${sessionType ? sessionType.nextElementSibling.textContent.trim() : ''}, pacientes: ${patientNames}, dia: ${date}, horário: ${startTime}`;
     }
+
+    // Adicionar event listeners para atualizar o resumo
+    document.querySelectorAll('.session-type-item').forEach(item => {
+        item.addEventListener('change', updateSummary);
+    });
+
+    document.querySelectorAll('.session-time-item').forEach(item => {
+        item.addEventListener('change', updateSummary);
+    });
+
+    document.querySelectorAll('.patient-item').forEach(item => {
+        item.addEventListener('change', updateSummary);
+    });
+
+    document.getElementById('start_time').addEventListener('input', updateSummary);
+    document.getElementById('date').addEventListener('input', updateSummary);
+
 
     document.addEventListener('DOMContentLoaded', function() {
         new Cleave('#start_time', {
+            time: true,
+            timePattern: ['h', 'm']
+        });
+
+        new Cleave('#edit-start_time', {
             time: true,
             timePattern: ['h', 'm']
         });
@@ -462,37 +779,43 @@
             updateSummary();
         });
 
-        document.getElementById('sessionForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+        document.getElementById('edit-start_time').addEventListener('input', function() {
+            updateSummary();
+        });
 
-            console.log('Submitting form...');
+        document.getElementById('edit-session-modal').querySelector('[data-modal-hide="edit-session-modal"]').addEventListener('click', () => {
+            const modal = document.getElementById('edit-session-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('fixed', 'inset-0', 'flex', 'items-center', 'justify-center');
+            document.body.classList.remove('overflow-hidden'); // Re-enable background scrolling
+        });
 
-            const startTimeInput = document.getElementById('start_time').value;
+        document.getElementById('edit-session-modal').querySelector('.bg-orange-700').addEventListener('click', function() {
+            console.log('Updating session...');
+            const sessionId = document.getElementById('edit-session-modal').dataset.sessionId;
+            const startTimeInput = document.getElementById('edit-start_time').value;
             const sessionTimeInput = document.querySelector('.session-time-item:checked');
             const sessionTime = sessionTimeInput ? sessionTimeInput.nextElementSibling.textContent.trim().split(' ')[0] : '';
-
             const endTime = calculateEndTime(startTimeInput, sessionTime);
-
-            console.log('Start time:', startTimeInput);
-            console.log('Session time:', sessionTime);
-            console.log('End time:', endTime);
-
             const patientIds = document.getElementById('patient_ids').value;
-            console.log('Patient IDs:', patientIds);
+
+            console.log({ startTimeInput, sessionTime, endTime, patientIds });
 
             if (!startTimeInput || !sessionTime || isNaN(Date.parse(`01/01/1970 ${endTime}`)) || !patientIds) {
                 console.error('Invalid data:', { startTime: startTimeInput, sessionTime, endTime, patientIds });
                 return;
             }
 
-            const formData = new FormData(this);
+            const formData = new FormData();
+            formData.set('session_type', document.getElementById('session_type').value);
             formData.set('start_time', startTimeInput);
             formData.set('session_time', sessionTime);
             formData.set('end_time', endTime);
             formData.set('patient_id', patientIds);
+            formData.set('date', document.getElementById('date').value);
 
-            fetch(this.action, {
-                method: 'POST',
+            fetch(`/sessions/${sessionId}`, {
+                method: 'PUT',
                 body: formData,
                 headers: {
                     'Accept': 'application/json'
@@ -500,16 +823,52 @@
             }).then(response => {
                 if (!response.ok) {
                     return response.json().then(data => {
-                        throw new Error(data.message || 'Submission failed');
+                        throw new Error(data.message || 'Update failed');
                     });
                 }
                 return response.json();
             }).then(data => {
                 if (data.success) {
+                    console.log('Session updated successfully');
                     updateScheduledSessions(new Date(document.getElementById('date').value));
-                    hideModal();
+                    const modal = document.getElementById('edit-session-modal');
+                    modal.classList.add('hidden');
+                    modal.classList.remove('fixed', 'inset-0', 'flex', 'items-center', 'justify-center');
+                    document.body.classList.remove('overflow-hidden'); // Re-enable background scrolling
                 } else {
-                    console.log('Submission failed:', data);
+                    console.log('Update failed:', data);
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.getElementById('edit-session-modal').querySelector('.bg-red-600').addEventListener('click', function() {
+            console.log('Deleting session...');
+            const sessionId = document.getElementById('edit-session-modal').dataset.sessionId;
+
+            fetch(`/sessions/${sessionId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.message || 'Delete failed');
+                    });
+                }
+                return response.json();
+            }).then(data => {
+                if (data.success) {
+                    console.log('Session deleted successfully');
+                    updateScheduledSessions(new Date(document.getElementById('date').value));
+                    const modal = document.getElementById('edit-session-modal');
+                    modal.classList.add('hidden');
+                    modal.classList.remove('fixed', 'inset-0', 'flex', 'items-center', 'justify-center');
+                    document.body.classList.remove('overflow-hidden'); // Re-enable background scrolling
+                } else {
+                    console.log('Delete failed:', data);
                 }
             }).catch(error => {
                 console.error('Error:', error);
@@ -525,33 +884,6 @@
             const endHours = hours + Math.floor(endMinutes / 60);
 
             return `${String(endHours).padStart(2, '0')}:${String(endMinutes % 60).padStart(2, '0')}`;
-        }
-
-        function updateSummary() {
-            const sessionType = document.querySelector('.session-type-item:checked');
-            const sessionTime = document.querySelector('.session-time-item:checked');
-            const patients = Array.from(document.querySelectorAll('#search-results .patient-item:checked')).map(checkbox => ({
-                id: checkbox.value,
-                name: checkbox.dataset.name
-            }));
-            const date = document.getElementById('date').value;
-            const startTime = document.getElementById('start_time').value;
-
-            if (sessionType || sessionTime || patients.length > 0 || date || startTime) {
-                document.getElementById('summary-container').classList.remove('hidden');
-            } else {
-                document.getElementById('summary-container').classList.add('hidden');
-            }
-
-            const patientIds = patients.map(patient => patient.id).join(',');
-            const patientNames = patients.map(patient => patient.name).join(', ');
-
-            document.getElementById('session_type').value = sessionType ? sessionType.nextElementSibling.textContent.trim() : '';
-            document.getElementById('session_time').value = sessionTime ? sessionTime.nextElementSibling.textContent.trim().split(' ')[0] : '';
-            document.getElementById('patient_ids').value = patientIds;
-
-            console.log('Patient IDs updated:', patientIds);
-            document.getElementById('summary').textContent = `Tipo de atendimento: ${sessionType ? sessionType.nextElementSibling.textContent.trim() : ''}, pacientes: ${patientNames}, dia: ${date}, horário: ${startTime}`;
         }
 
         document.querySelectorAll('.checkbox-item').forEach(checkbox => {
@@ -603,13 +935,17 @@
             }
         });
 
-        document.getElementById('dropdownSessionTypeButton').addEventListener('click', function() {
-            document.getElementById('dropdownSessionType').classList.toggle('hidden');
+        document.getElementById('dropdownSessionTypeButton1').addEventListener('click', function() {
+            document.getElementById('dropdownSessionType1').classList.toggle('hidden');
         });
 
-        document.getElementById('dropdownSessionTimeButton').addEventListener('click', function() {
-            document.getElementById('dropdownSessionTime').classList.toggle('hidden');
+        document.getElementById('dropdownSessionTimeButton1').addEventListener('click', function() {
+            document.getElementById('dropdownSessionTime1').classList.toggle('hidden');
         });
+
+        // Fetch and display today's sessions when the page loads
+        const today = new Date();
+        updateTodaySessions(today);
     });
 
     function updateScheduledSessions(selectedDate) {
@@ -617,8 +953,10 @@
         fetch(`/sessions/by-date?date=${date}`)
             .then(response => response.json())
             .then(data => {
-                const scheduledSessionsDiv = document.getElementById('scheduled-sessions');
-                scheduledSessionsDiv.innerHTML = '';
+                const scheduledSessionsList = document.getElementById('scheduled-sessions-list');
+                const scheduledSessionsTableBody = document.getElementById('scheduled-sessions-table-body');
+                scheduledSessionsList.innerHTML = '';
+                scheduledSessionsTableBody.innerHTML = '';
 
                 const uniqueSessions = new Set();
 
@@ -630,24 +968,141 @@
                             const div = document.createElement('div');
                             div.classList.add('font-normal', 'text-gray-700', 'dark:text-gray-400');
                             div.textContent = sessionString;
-                            scheduledSessionsDiv.appendChild(div);
+                            scheduledSessionsList.appendChild(div);
                         }
+
+                        const row = document.createElement('tr');
+                        row.classList.add('bg-white', 'dark:bg-gray-800', 'hover:bg-gray-50', 'dark:hover:bg-gray-600');
+
+                        const nameCell = document.createElement('th');
+                        nameCell.scope = 'row';
+                        nameCell.classList.add('px-6', 'py-4', 'font-medium', 'text-gray-900', 'whitespace-nowrap', 'dark:text-white');
+                        nameCell.textContent = session.patient_name;
+
+                        const timeCell = document.createElement('td');
+                        timeCell.classList.add('px-6', 'py-4');
+                        timeCell.textContent = `${session.start_time} - ${session.end_time}`;
+
+                        const phoneCell = document.createElement('td');
+                        phoneCell.classList.add('px-6', 'py-4');
+                        phoneCell.textContent = session.patient_phone;
+
+                        row.appendChild(nameCell);
+                        row.appendChild(timeCell);
+                        row.appendChild(phoneCell);
+
+                        scheduledSessionsTableBody.appendChild(row);
                     });
                 } else {
-                    scheduledSessionsDiv.innerHTML = '<div class="text-gray-500">Nenhuma sessão marcada</div>';
+                    scheduledSessionsList.innerHTML = '<div class="text-gray-500">Nenhuma sessão marcada</div>';
+                    const noDataRow = document.createElement('tr');
+                    noDataRow.classList.add('bg-white', 'dark:bg-gray-800', 'hover:bg-gray-50', 'dark:hover:bg-gray-600');
+                    const noDataCell = document.createElement('td');
+                    noDataCell.colSpan = 3;
+                    noDataCell.classList.add('px-6', 'py-4', 'font-medium', 'text-gray-900', 'whitespace-nowrap', 'dark:text-white', 'text-center');
+                    noDataCell.textContent = 'Nenhuma sessão marcada';
+                    noDataRow.appendChild(noDataCell);
+                    scheduledSessionsTableBody.appendChild(noDataRow);
                 }
             })
             .catch(error => {
                 console.error('Error fetching sessions:', error);
-                scheduledSessionsDiv.innerHTML = '<div class="text-gray-500">Erro ao carregar as sessões</div>';
+                const scheduledSessionsList = document.getElementById('scheduled-sessions-list');
+                const scheduledSessionsTableBody = document.getElementById('scheduled-sessions-table-body');
+                scheduledSessionsList.innerHTML = '<div class="text-gray-500">Erro ao carregar as sessões</div>';
+                scheduledSessionsTableBody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-gray-500">Erro ao carregar as sessões</td></tr>';
             });
     }
 
 
+    function updateTodaySessions(today) {
+        const date = today.toISOString().split('T')[0];
+        fetch(`/sessions/by-date?date=${date}`)
+            .then(response => response.json())
+            .then(data => {
+                const todaySessionsTableBody = document.getElementById('today-sessions-table-body');
+                todaySessionsTableBody.innerHTML = '';
+
+                console.log('Sessões de hoje:', data); // Adicionar mensagem de depuração
+
+                if (data.length > 0) {
+                    data.forEach(session => {
+                        const row = document.createElement('tr');
+                        row.classList.add('bg-white', 'dark:bg-gray-700', 'hover:bg-gray-50', 'dark:hover:bg-gray-600');
+
+                        const nameCell = document.createElement('th');
+                        nameCell.scope = 'row';
+                        nameCell.classList.add('px-6', 'py-4', 'font-medium', 'text-gray-900', 'whitespace-nowrap', 'dark:text-white');
+                        nameCell.textContent = session.patient_name;
+
+                        const timeCell = document.createElement('td');
+                        timeCell.classList.add('px-6', 'py-4');
+                        timeCell.textContent = `${session.start_time} - ${session.end_time}`;
+
+                        const phoneCell = document.createElement('td');
+                        phoneCell.classList.add('px-6', 'py-4');
+                        phoneCell.textContent = session.patient_phone;
+
+                        row.appendChild(nameCell);
+                        row.appendChild(timeCell);
+                        row.appendChild(phoneCell);
+
+                        todaySessionsTableBody.appendChild(row);
+                    });
+                } else {
+                    const noDataRow = document.createElement('tr');
+                    noDataRow.classList.add('bg-white', 'dark:bg-gray-800', 'hover:bg-gray-50', 'dark:hover:bg-gray-600');
+                    const noDataCell = document.createElement('td');
+                    noDataCell.colSpan = 3;
+                    noDataCell.classList.add('px-6', 'py-4', 'font-medium', 'text-gray-900', 'whitespace-nowrap', 'dark:text-white', 'text-center');
+                    noDataCell.textContent = 'Nenhuma sessão marcada';
+                    noDataRow.appendChild(noDataCell);
+                    todaySessionsTableBody.appendChild(noDataRow);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching today\'s sessions:', error);
+                const todaySessionsTableBody = document.getElementById('today-sessions-table-body');
+                todaySessionsTableBody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-gray-500">Erro ao carregar as sessões</td></tr>';
+            });
+    }
 
 
+    function handleEditButtonClick(event) {
+        const sessionData = {
+            session_id: event.currentTarget.dataset.sessionId,
+            patient_name: event.currentTarget.dataset.patientName,
+            session_type: event.currentTarget.dataset.sessionType,
+            start_time: event.currentTarget.dataset.startTime,
+            session_duration: event.currentTarget.dataset.sessionDuration,
+        };
+        openEditModal(sessionData);
+    }
 
+    function handleCalendarEditButtonClick(event) {
+        hideModal(); // Hide calendar modal
+        const sessionData = {
+            session_id: event.currentTarget.dataset.sessionId,
+            patient_name: event.currentTarget.dataset.patientName,
+            session_type: event.currentTarget.dataset.sessionType,
+            start_time: event.currentTarget.dataset.startTime,
+            session_duration: event.currentTarget.dataset.sessionDuration,
+        };
+        openEditModal(sessionData);
+    }
 
+    function openEditModal(sessionData) {
+        document.getElementById('edit-session-modal').dataset.sessionId = sessionData.session_id;
+        document.getElementById('edit-patient-name').textContent = sessionData.patient_name;
+        document.getElementById('edit-session-type').textContent = sessionData.session_type;
+        document.getElementById('edit-session-start-time').textContent = sessionData.start_time;
+        document.getElementById('edit-session-duration').textContent = sessionData.session_duration;
+        document.getElementById('edit-start_time').value = sessionData.start_time;
+        const modal = document.getElementById('edit-session-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('fixed', 'inset-0', 'flex', 'items-center', 'justify-center');
+        document.body.classList.add('overflow-hidden'); // Prevent background scrolling
+    }
 
     const options = {
         chart: {
@@ -673,8 +1128,11 @@
             gradient: {
                 opacityFrom: 0.55,
                 opacityTo: 0,
-                shade: "#1C64F2",
-                gradientToColors: ["#1C64F2"],
+                shade: "light",
+                gradientToColors: ["#F97316"], // orange-500
+                shadeIntensity: 1,
+                type: "horizontal",
+                stops: [0, 100],
             },
         },
         dataLabels: {
@@ -682,6 +1140,7 @@
         },
         stroke: {
             width: 6,
+            colors: ["#F97316"], // orange-500
         },
         grid: {
             show: false,
@@ -696,7 +1155,7 @@
             {
                 name: "New users",
                 data: [6500, 6418, 6456, 6526, 6356, 6456],
-                color: "#1A56DB",
+                color: "#F97316", // orange-500
             },
         ],
         xaxis: {
@@ -720,11 +1179,13 @@
         const chart = new ApexCharts(document.getElementById("area-chart"), options);
         chart.render();
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fetch and display today's sessions when the page loads
+        const today = new Date();
+        updateTodaySessions(today);
+    });
 </script>
-
-
-
-
 
 
 <x-Footer></x-Footer>
