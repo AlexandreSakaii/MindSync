@@ -12,10 +12,6 @@ class SessionType extends Model
     protected $fillable = [
         'psychologist_id',
         'name',
+        'color', // Adiciona isso aqui
     ];
-
-    public function psychologist()
-    {
-        return $this->belongsTo(Psychologist::class);
-    }
 }

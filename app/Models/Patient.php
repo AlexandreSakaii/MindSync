@@ -10,7 +10,7 @@ class Patient extends Model
     use HasFactory;
 
     protected $fillable = [
-        'psychologist_id',
+        'psychologist_id', // Adicione isso aqui
         'name',
         'number',
         'birthdate',
@@ -22,4 +22,10 @@ class Patient extends Model
     {
         return $this->belongsTo(Psychologist::class);
     }
+
+    public function sessions()
+    {
+        return $this->belongsToMany(Session::class, 'session_patient');
+    }
 }
+

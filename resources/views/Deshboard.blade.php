@@ -97,7 +97,7 @@
                                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSessionTypeButton">
                                             @foreach ($sessionTypes as $sessionType)
                                                 <li class="flex items-center p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg">
-                                                    <input type="checkbox" class="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 me-2 checkbox-item session-type-item">
+                                                    <input type="radio" class="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 me-2 checkbox-item session-type-item">
                                                     <span class="text-white dark:text-white">{{ $sessionType->name }}</span>
                                                 </li>
                                             @endforeach
@@ -117,6 +117,7 @@
                                         <div id="search-results" class="mt-2 hidden w-80 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 absolute z-10"></div>
                                     </form>
 
+                                    <!-- Dentro do modal -->
                                     <div class="relative mt-4">
                                         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-alarm" viewBox="0 0 16 16">
@@ -174,15 +175,10 @@
                                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-800 dark:text-gray-400">
                                     <tr>
-                                        <th scope="col" class="px-6 py-3 border-b border-gray-300 dark:border-gray-600">
-                                            Sessões de hoje
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 border-b border-gray-300 dark:border-gray-600">
-                                            Horário
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 border-b border-gray-300 dark:border-gray-600">
-                                            Telefone do paciente
-                                        </th>
+                                        <th scope="col" class="px-6 py-3">Sessão</th>
+                                        <th scope="col" class="px-6 py-3">Horário</th>
+                                        <th scope="col" class="px-6 py-3">Telefone do paciente</th>
+                                        <th scope="col" class="px-6 py-3">Tipo de sessão</th>
                                     </tr>
                                     </thead>
                                     <tbody id="scheduled-sessions-table-body">
@@ -233,15 +229,10 @@
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-800 dark:text-gray-400">
         <tr>
-            <th scope="col" class="px-6 py-3">
-                Sessões de hoje
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Horário
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Telefone do paciente
-            </th>
+            <th scope="col" class="px-6 py-3">Sessão</th>
+            <th scope="col" class="px-6 py-3">Horário</th>
+            <th scope="col" class="px-6 py-3">Telefone do paciente</th>
+            <th scope="col" class="px-6 py-3">Tipo de sessão</th>
         </tr>
         </thead>
         <tbody id="today-sessions-table-body">
@@ -411,6 +402,8 @@
 <script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
 
 <script>
+    let selectedPatients = {};
+
     function generateCalendar(year, month) {
         const calendarElement = document.getElementById('calendar');
         const currentMonthElement = document.getElementById('currentMonth');
@@ -490,15 +483,13 @@
         const errorMessageElement = document.getElementById('error-message');
         errorMessageElement.classList.add('hidden');
 
-        const sessionType = document.getElementById('session_type').value;
+        const sessionTypeElement = document.querySelector('.session-type-item:checked');
+        const sessionType = sessionTypeElement ? sessionTypeElement.nextElementSibling.textContent.trim() : null;
         const startTime = document.getElementById('start_time').value;
-        const sessionTime = document.getElementById('session_time').value;
-        const patientIds = document.getElementById('patient_ids').value;
+        const sessionTime = document.querySelector('.session-time-item:checked').nextElementSibling.textContent.trim().split(' ')[0];
+        const patientIds = Object.keys(selectedPatients).join(',');
         const date = document.getElementById('date').value;
 
-        console.log({ sessionType, startTime, sessionTime, patientIds, date });
-
-        // Verificar se os campos estão vazios e exibir mensagens de erro apropriadas
         if (!sessionType) {
             errorMessageElement.textContent = 'O campo tipo de sessão é obrigatório.';
             errorMessageElement.classList.remove('hidden');
@@ -553,8 +544,7 @@
         }).then(data => {
             if (data.success) {
                 console.log('Sessão criada com sucesso');
-                updateScheduledSessions(new Date(document.getElementById('date').value));
-                hideModal();
+                window.location.reload(); // Adiciona o recarregamento da página aqui
             } else {
                 console.log('Falha ao criar a sessão:', data);
             }
@@ -566,8 +556,10 @@
     });
 
 
+
+
+
     document.addEventListener('DOMContentLoaded', function() {
-        // Fetch and display today's sessions when the page loads
         const today = new Date();
         updateTodaySessions(today);
     });
@@ -580,17 +572,21 @@
                 const todaySessionsTableBody = document.getElementById('today-sessions-table-body');
                 todaySessionsTableBody.innerHTML = '';
 
-                console.log('Sessões de hoje:', data); // Adicionar mensagem de depuração
-
                 if (data.length > 0) {
                     data.forEach(session => {
                         const row = document.createElement('tr');
-                        row.classList.add('bg-white', 'dark:bg-gray-700', 'hover:bg-gray-50', 'dark:hover:bg-gray-600');
+                        row.classList.add('hover:bg-gray-50', 'dark:hover:bg-gray-600');
+
+                        if (session.color) {
+                            row.style.backgroundColor = session.color;
+                        } else {
+                            row.classList.add('bg-white', 'dark:bg-gray-700');
+                        }
 
                         const nameCell = document.createElement('th');
                         nameCell.scope = 'row';
-                        nameCell.classList.add('px-6', 'py-4', 'font-medium', 'text-gray-900', 'whitespace-nowrap', 'dark:text-white');
-                        nameCell.textContent = session.patient_name;
+                        nameCell.classList.add('px-6', 'py-4', 'font-medium', 'whitespace-nowrap');
+                        nameCell.textContent = session.patients.map(patient => patient.name).join(', ');
 
                         const timeCell = document.createElement('td');
                         timeCell.classList.add('px-6', 'py-4');
@@ -598,47 +594,24 @@
 
                         const phoneCell = document.createElement('td');
                         phoneCell.classList.add('px-6', 'py-4');
-                        phoneCell.textContent = session.patient_phone;
+                        phoneCell.textContent = session.patients.map(patient => patient.phone).join(', ');
 
-                        const startLinkCell = document.createElement('td');
-                        startLinkCell.classList.add('px-6', 'py-4', 'text-left');
-                        const startLink = document.createElement('a');
-                        startLink.href = '#';
-                        startLink.classList.add('font-medium', 'text-orange-500', 'hover:underline');
-                        startLink.textContent = 'Iniciar sessão';
-                        startLinkCell.appendChild(startLink);
-
-                        const editLinkCell = document.createElement('td');
-                        editLinkCell.classList.add('px-6', 'py-4', 'text-right');
-                        const editLink = document.createElement('a');
-                        editLink.href = '#';
-                        editLink.classList.add('font-medium', 'text-blue-600', 'dark:text-orange-600', 'hover:underline', 'edit-button');
-                        editLink.dataset.sessionId = session.id;
-                        editLink.dataset.patientName = session.patient_name;
-                        editLink.dataset.sessionType = session.session_type;
-                        editLink.dataset.startTime = session.start_time;
-                        editLink.dataset.sessionDuration = session.session_duration;
-                        editLink.textContent = 'Editar';
-                        editLinkCell.appendChild(editLink);
+                        const typeCell = document.createElement('td');
+                        typeCell.classList.add('px-6', 'py-4');
+                        typeCell.textContent = session.session_type;
 
                         row.appendChild(nameCell);
                         row.appendChild(timeCell);
                         row.appendChild(phoneCell);
-                        row.appendChild(startLinkCell);
-                        row.appendChild(editLinkCell);
+                        row.appendChild(typeCell);
 
                         todaySessionsTableBody.appendChild(row);
                     });
-
-                    // Add event listeners for newly created edit buttons
-                    document.querySelectorAll('#today-sessions-table-body .edit-button').forEach(button => {
-                        button.addEventListener('click', handleEditButtonClick);
-                    });
                 } else {
                     const noDataRow = document.createElement('tr');
-                    noDataRow.classList.add('bg-white', 'dark:bg-gray-800', 'hover:bg-gray-50', 'dark:hover:bg-gray-600');
+                    noDataRow.classList.add('bg-white', 'dark:bg-gray-700', 'hover:bg-gray-50', 'dark:hover:bg-gray-600');
                     const noDataCell = document.createElement('td');
-                    noDataCell.colSpan = 5;
+                    noDataCell.colSpan = 4;
                     noDataCell.classList.add('px-6', 'py-4', 'font-medium', 'text-gray-900', 'whitespace-nowrap', 'dark:text-white', 'text-center');
                     noDataCell.textContent = 'Nenhuma sessão marcada';
                     noDataRow.appendChild(noDataCell);
@@ -648,10 +621,9 @@
             .catch(error => {
                 console.error('Error fetching today\'s sessions:', error);
                 const todaySessionsTableBody = document.getElementById('today-sessions-table-body');
-                todaySessionsTableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">Erro ao carregar as sessões</td></tr>';
+                todaySessionsTableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">Erro ao carregar as sessões</td></tr>';
             });
     }
-
 
     function showModal(formattedDate, selectedDate) {
         const modal = document.getElementById('myModal');
@@ -662,14 +634,14 @@
 
         modal.classList.remove('hidden');
         modal.classList.add('fixed', 'inset-0', 'flex', 'items-center', 'justify-center');
-        document.body.classList.add('overflow-hidden'); // Prevent background scrolling
+        document.body.classList.add('overflow-hidden');
     }
 
     function hideModal() {
         const modal = document.getElementById('myModal');
         modal.classList.add('hidden');
         modal.classList.remove('fixed', 'inset-0', 'flex', 'items-center', 'justify-center');
-        document.body.classList.remove('overflow-hidden'); // Re-enable background scrolling
+        document.body.classList.remove('overflow-hidden');
     }
 
     document.getElementById('closeModal').addEventListener('click', () => {
@@ -694,7 +666,7 @@
                             checkbox.type = 'checkbox';
                             checkbox.value = patient.id;
                             checkbox.classList.add('w-4', 'h-4', 'text-blue-600', 'bg-gray-100', 'border-gray-300', 'rounded', 'focus:ring-blue-500', 'dark:focus:ring-blue-600', 'dark:ring-offset-gray-700', 'dark:focus:ring-offset-gray-700', 'focus:ring-2', 'dark:bg-gray-600', 'dark:border-gray-500', 'me-2', 'patient-item');
-                            checkbox.dataset.name = patient.name; // Adicionando o nome do paciente ao dataset
+                            checkbox.dataset.name = patient.name;
                             checkbox.addEventListener('change', function() {
                                 updateSummary();
                             });
@@ -722,32 +694,27 @@
     function updateSummary() {
         const sessionType = document.querySelector('.session-type-item:checked');
         const sessionTime = document.querySelector('.session-time-item:checked');
-        const patients = Array.from(document.querySelectorAll('#search-results .patient-item:checked')).map(checkbox => ({
-            id: checkbox.value,
-            name: checkbox.dataset.name
-        }));
         const date = document.getElementById('date').value;
         const startTime = document.getElementById('start_time').value;
 
         const summaryContainer = document.getElementById('summary-container');
         const summary = document.getElementById('summary');
 
-        if (sessionType || sessionTime || patients.length > 0 || date || startTime) {
+        if (sessionType || sessionTime || Object.keys(selectedPatients).length > 0 || date || startTime) {
             summaryContainer.classList.remove('hidden');
         } else {
             summaryContainer.classList.add('hidden');
         }
 
-        const patientNames = patients.map(patient => patient.name).join(', ');
+        const patientNames = Object.values(selectedPatients).join(', ');
 
         document.getElementById('session_type').value = sessionType ? sessionType.nextElementSibling.textContent.trim() : '';
         document.getElementById('session_time').value = sessionTime ? sessionTime.nextElementSibling.textContent.trim().split(' ')[0] : '';
-        document.getElementById('patient_ids').value = patients.map(patient => patient.id).join(',');
+        document.getElementById('patient_ids').value = Object.keys(selectedPatients).join(',');
 
         summary.textContent = `Tipo de atendimento: ${sessionType ? sessionType.nextElementSibling.textContent.trim() : ''}, pacientes: ${patientNames}, dia: ${date}, horário: ${startTime}`;
     }
 
-    // Adicionar event listeners para atualizar o resumo
     document.querySelectorAll('.session-type-item').forEach(item => {
         item.addEventListener('change', updateSummary);
     });
@@ -762,7 +729,6 @@
 
     document.getElementById('start_time').addEventListener('input', updateSummary);
     document.getElementById('date').addEventListener('input', updateSummary);
-
 
     document.addEventListener('DOMContentLoaded', function() {
         new Cleave('#start_time', {
@@ -787,7 +753,7 @@
             const modal = document.getElementById('edit-session-modal');
             modal.classList.add('hidden');
             modal.classList.remove('fixed', 'inset-0', 'flex', 'items-center', 'justify-center');
-            document.body.classList.remove('overflow-hidden'); // Re-enable background scrolling
+            document.body.classList.remove('overflow-hidden');
         });
 
         document.getElementById('edit-session-modal').querySelector('.bg-orange-700').addEventListener('click', function() {
@@ -834,7 +800,7 @@
                     const modal = document.getElementById('edit-session-modal');
                     modal.classList.add('hidden');
                     modal.classList.remove('fixed', 'inset-0', 'flex', 'items-center', 'justify-center');
-                    document.body.classList.remove('overflow-hidden'); // Re-enable background scrolling
+                    document.body.classList.remove('overflow-hidden');
                 } else {
                     console.log('Update failed:', data);
                 }
@@ -866,7 +832,7 @@
                     const modal = document.getElementById('edit-session-modal');
                     modal.classList.add('hidden');
                     modal.classList.remove('fixed', 'inset-0', 'flex', 'items-center', 'justify-center');
-                    document.body.classList.remove('overflow-hidden'); // Re-enable background scrolling
+                    document.body.classList.remove('overflow-hidden');
                 } else {
                     console.log('Delete failed:', data);
                 }
@@ -891,18 +857,21 @@
                 updateSummary();
             });
         });
+    });
 
-        document.getElementById('patient-search').addEventListener('input', function() {
-            const query = this.value;
-            const resultsDiv = document.getElementById('search-results');
+    document.getElementById('patient-search').addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        const resultsDiv = document.getElementById('search-results');
 
-            if (query.length > 0) {
-                fetch(`/patients/search?query=${query}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        resultsDiv.innerHTML = '';
-                        if (data.length > 0) {
-                            data.forEach(patient => {
+        if (query.length > 0) {
+            fetch(`/patients/search?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    resultsDiv.innerHTML = '';
+                    if (data.length > 0) {
+                        data.forEach(patient => {
+                            const regex = new RegExp(query, 'i');
+                            if (regex.test(patient.name)) {
                                 const div = document.createElement('div');
                                 div.classList.add('flex', 'items-center', 'p-2', 'cursor-pointer', 'hover:bg-gray-200', 'dark:hover:bg-gray-600', 'rounded-lg');
 
@@ -911,7 +880,17 @@
                                 checkbox.value = patient.id;
                                 checkbox.classList.add('w-4', 'h-4', 'text-blue-600', 'bg-gray-100', 'border-gray-300', 'rounded', 'focus:ring-blue-500', 'dark:focus:ring-blue-600', 'dark:ring-offset-gray-700', 'dark:focus:ring-offset-gray-700', 'focus:ring-2', 'dark:bg-gray-600', 'dark:border-gray-500', 'me-2', 'patient-item');
                                 checkbox.dataset.name = patient.name;
+
+                                if (selectedPatients[patient.id]) {
+                                    checkbox.checked = true;
+                                }
+
                                 checkbox.addEventListener('change', function() {
+                                    if (checkbox.checked) {
+                                        selectedPatients[patient.id] = patient.name;
+                                    } else {
+                                        delete selectedPatients[patient.id];
+                                    }
                                     updateSummary();
                                 });
 
@@ -923,29 +902,17 @@
                                 div.appendChild(span);
 
                                 resultsDiv.appendChild(div);
-                            });
-                            resultsDiv.classList.remove('hidden');
-                        } else {
-                            resultsDiv.innerHTML = '<div class="p-2 text-gray-500">Nenhum paciente encontrado</div>';
-                            resultsDiv.classList.remove('hidden');
-                        }
-                    });
-            } else {
-                resultsDiv.classList.add('hidden');
-            }
-        });
-
-        document.getElementById('dropdownSessionTypeButton1').addEventListener('click', function() {
-            document.getElementById('dropdownSessionType1').classList.toggle('hidden');
-        });
-
-        document.getElementById('dropdownSessionTimeButton1').addEventListener('click', function() {
-            document.getElementById('dropdownSessionTime1').classList.toggle('hidden');
-        });
-
-        // Fetch and display today's sessions when the page loads
-        const today = new Date();
-        updateTodaySessions(today);
+                            }
+                        });
+                        resultsDiv.classList.remove('hidden');
+                    } else {
+                        resultsDiv.innerHTML = '<div class="p-2 text-gray-500">Nenhum paciente encontrado</div>';
+                        resultsDiv.classList.remove('hidden');
+                    }
+                });
+        } else {
+            resultsDiv.classList.add('hidden');
+        }
     });
 
     function updateScheduledSessions(selectedDate) {
@@ -953,31 +920,26 @@
         fetch(`/sessions/by-date?date=${date}`)
             .then(response => response.json())
             .then(data => {
-                const scheduledSessionsList = document.getElementById('scheduled-sessions-list');
                 const scheduledSessionsTableBody = document.getElementById('scheduled-sessions-table-body');
-                scheduledSessionsList.innerHTML = '';
+                const scheduledSessionsList = document.getElementById('scheduled-sessions-list');
                 scheduledSessionsTableBody.innerHTML = '';
-
-                const uniqueSessions = new Set();
+                scheduledSessionsList.innerHTML = '';
 
                 if (data.length > 0) {
                     data.forEach(session => {
-                        const sessionString = `${session.start_time} a ${session.end_time}`;
-                        if (!uniqueSessions.has(sessionString)) {
-                            uniqueSessions.add(sessionString);
-                            const div = document.createElement('div');
-                            div.classList.add('font-normal', 'text-gray-700', 'dark:text-gray-400');
-                            div.textContent = sessionString;
-                            scheduledSessionsList.appendChild(div);
-                        }
-
                         const row = document.createElement('tr');
-                        row.classList.add('bg-white', 'dark:bg-gray-800', 'hover:bg-gray-50', 'dark:hover:bg-gray-600');
+                        row.classList.add('hover:bg-gray-50', 'dark:hover:bg-gray-600', 'text-white');
+
+                        if (session.color) {
+                            row.style.backgroundColor = session.color;
+                        } else {
+                            row.classList.add('bg-white', 'dark:bg-gray-800');
+                        }
 
                         const nameCell = document.createElement('th');
                         nameCell.scope = 'row';
-                        nameCell.classList.add('px-6', 'py-4', 'font-medium', 'text-gray-900', 'whitespace-nowrap', 'dark:text-white');
-                        nameCell.textContent = session.patient_name;
+                        nameCell.classList.add('px-6', 'py-4', 'font-medium', 'whitespace-nowrap');
+                        nameCell.textContent = session.patients.map(patient => patient.name).join(', ');
 
                         const timeCell = document.createElement('td');
                         timeCell.classList.add('px-6', 'py-4');
@@ -985,34 +947,50 @@
 
                         const phoneCell = document.createElement('td');
                         phoneCell.classList.add('px-6', 'py-4');
-                        phoneCell.textContent = session.patient_phone;
+                        phoneCell.textContent = session.patients.map(patient => patient.phone).join(', ');
+
+                        const typeCell = document.createElement('td');
+                        typeCell.classList.add('px-6', 'py-4');
+                        typeCell.textContent = session.session_type;
 
                         row.appendChild(nameCell);
                         row.appendChild(timeCell);
                         row.appendChild(phoneCell);
+                        row.appendChild(typeCell);
 
                         scheduledSessionsTableBody.appendChild(row);
+
+                        const scheduleItem = document.createElement('div');
+                        scheduleItem.classList.add('font-normal', 'text-gray-700', 'dark:text-gray-400');
+                        scheduleItem.textContent = `${session.start_time} - ${session.end_time}`;
+                        scheduledSessionsList.appendChild(scheduleItem);
                     });
                 } else {
-                    scheduledSessionsList.innerHTML = '<div class="text-gray-500">Nenhuma sessão marcada</div>';
                     const noDataRow = document.createElement('tr');
                     noDataRow.classList.add('bg-white', 'dark:bg-gray-800', 'hover:bg-gray-50', 'dark:hover:bg-gray-600');
                     const noDataCell = document.createElement('td');
-                    noDataCell.colSpan = 3;
+                    noDataCell.colSpan = 4;
                     noDataCell.classList.add('px-6', 'py-4', 'font-medium', 'text-gray-900', 'whitespace-nowrap', 'dark:text-white', 'text-center');
                     noDataCell.textContent = 'Nenhuma sessão marcada';
                     noDataRow.appendChild(noDataCell);
                     scheduledSessionsTableBody.appendChild(noDataRow);
+
+                    const noScheduleItem = document.createElement('div');
+                    noScheduleItem.classList.add('text-gray-500');
+                    noScheduleItem.textContent = 'Nenhuma sessão marcada';
+                    scheduledSessionsList.appendChild(noScheduleItem);
                 }
             })
             .catch(error => {
                 console.error('Error fetching sessions:', error);
-                const scheduledSessionsList = document.getElementById('scheduled-sessions-list');
                 const scheduledSessionsTableBody = document.getElementById('scheduled-sessions-table-body');
+                scheduledSessionsTableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">Erro ao carregar as sessões</td></tr>';
+
+                const scheduledSessionsList = document.getElementById('scheduled-sessions-list');
                 scheduledSessionsList.innerHTML = '<div class="text-gray-500">Erro ao carregar as sessões</div>';
-                scheduledSessionsTableBody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-gray-500">Erro ao carregar as sessões</td></tr>';
             });
     }
+
 
 
     function updateTodaySessions(today) {
@@ -1023,17 +1001,21 @@
                 const todaySessionsTableBody = document.getElementById('today-sessions-table-body');
                 todaySessionsTableBody.innerHTML = '';
 
-                console.log('Sessões de hoje:', data); // Adicionar mensagem de depuração
-
                 if (data.length > 0) {
                     data.forEach(session => {
                         const row = document.createElement('tr');
-                        row.classList.add('bg-white', 'dark:bg-gray-700', 'hover:bg-gray-50', 'dark:hover:bg-gray-600');
+                        row.classList.add('hover:bg-gray-50', 'dark:hover:bg-gray-600', 'text-white');
+
+                        if (session.color) {
+                            row.style.backgroundColor = session.color;
+                        } else {
+                            row.classList.add('bg-white', 'dark:bg-gray-700');
+                        }
 
                         const nameCell = document.createElement('th');
                         nameCell.scope = 'row';
-                        nameCell.classList.add('px-6', 'py-4', 'font-medium', 'text-gray-900', 'whitespace-nowrap', 'dark:text-white');
-                        nameCell.textContent = session.patient_name;
+                        nameCell.classList.add('px-6', 'py-4', 'font-medium', 'whitespace-nowrap');
+                        nameCell.textContent = session.patients.map(patient => patient.name).join(', ');
 
                         const timeCell = document.createElement('td');
                         timeCell.classList.add('px-6', 'py-4');
@@ -1041,19 +1023,24 @@
 
                         const phoneCell = document.createElement('td');
                         phoneCell.classList.add('px-6', 'py-4');
-                        phoneCell.textContent = session.patient_phone;
+                        phoneCell.textContent = session.patients.map(patient => patient.phone).join(', ');
+
+                        const typeCell = document.createElement('td');
+                        typeCell.classList.add('px-6', 'py-4');
+                        typeCell.textContent = session.session_type;
 
                         row.appendChild(nameCell);
                         row.appendChild(timeCell);
                         row.appendChild(phoneCell);
+                        row.appendChild(typeCell);
 
                         todaySessionsTableBody.appendChild(row);
                     });
                 } else {
                     const noDataRow = document.createElement('tr');
-                    noDataRow.classList.add('bg-white', 'dark:bg-gray-800', 'hover:bg-gray-50', 'dark:hover:bg-gray-600');
+                    noDataRow.classList.add('bg-white', 'dark:bg-gray-700', 'hover:bg-gray-50', 'dark:hover:bg-gray-600');
                     const noDataCell = document.createElement('td');
-                    noDataCell.colSpan = 3;
+                    noDataCell.colSpan = 4;
                     noDataCell.classList.add('px-6', 'py-4', 'font-medium', 'text-gray-900', 'whitespace-nowrap', 'dark:text-white', 'text-center');
                     noDataCell.textContent = 'Nenhuma sessão marcada';
                     noDataRow.appendChild(noDataCell);
@@ -1063,10 +1050,9 @@
             .catch(error => {
                 console.error('Error fetching today\'s sessions:', error);
                 const todaySessionsTableBody = document.getElementById('today-sessions-table-body');
-                todaySessionsTableBody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-gray-500">Erro ao carregar as sessões</td></tr>';
+                todaySessionsTableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">Erro ao carregar as sessões</td></tr>';
             });
     }
-
 
     function handleEditButtonClick(event) {
         const sessionData = {
@@ -1080,7 +1066,7 @@
     }
 
     function handleCalendarEditButtonClick(event) {
-        hideModal(); // Hide calendar modal
+        hideModal();
         const sessionData = {
             session_id: event.currentTarget.dataset.sessionId,
             patient_name: event.currentTarget.dataset.patientName,
@@ -1101,7 +1087,7 @@
         const modal = document.getElementById('edit-session-modal');
         modal.classList.remove('hidden');
         modal.classList.add('fixed', 'inset-0', 'flex', 'items-center', 'justify-center');
-        document.body.classList.add('overflow-hidden'); // Prevent background scrolling
+        document.body.classList.add('overflow-hidden');
     }
 
     const options = {
@@ -1129,7 +1115,7 @@
                 opacityFrom: 0.55,
                 opacityTo: 0,
                 shade: "light",
-                gradientToColors: ["#F97316"], // orange-500
+                gradientToColors: ["#F97316"],
                 shadeIntensity: 1,
                 type: "horizontal",
                 stops: [0, 100],
@@ -1140,7 +1126,7 @@
         },
         stroke: {
             width: 6,
-            colors: ["#F97316"], // orange-500
+            colors: ["#F97316"],
         },
         grid: {
             show: false,
@@ -1155,7 +1141,7 @@
             {
                 name: "New users",
                 data: [6500, 6418, 6456, 6526, 6356, 6456],
-                color: "#F97316", // orange-500
+                color: "#F97316",
             },
         ],
         xaxis: {
@@ -1181,7 +1167,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Fetch and display today's sessions when the page loads
         const today = new Date();
         updateTodaySessions(today);
     });

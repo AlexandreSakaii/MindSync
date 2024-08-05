@@ -21,7 +21,7 @@ class PatientController extends Controller
         $psychologist = Auth::guard('psychologist')->user();
 
         $patient = new Patient([
-            'psychologist_id' => $psychologist->id,
+            'psychologist_id' => $psychologist->id, // Adicione isso aqui
             'name' => $request->input('name'),
             'number' => $request->input('number'),
             'birthdate' => $request->input('birthdate'),
@@ -45,3 +45,4 @@ class PatientController extends Controller
         return response()->json($patients);
     }
 }
+

@@ -14,10 +14,10 @@
     <h5 class="mb-2  font-bold tracking-tight mt-4 text-gray-900 ">Configurar tipo de sessão</h5>
     <form class="w-5/6 mt-2 mb-4" action="{{ route('sessionTypes.store') }}" method="POST">
         @csrf
-        <label class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Adicionar tipo de sessão</label>
-        <div class="relative">
+        <div class="relative flex items-center">
             <input name="name" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-500 dark:border-gray-800 dark:placeholder-gray-400 dark:text-gray-900 dark:focus:ring-gray-500 dark:focus:border-gray-500" placeholder="Novo tipo de sessão" required />
-            <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-orange-600 dark:hover:bg-orange-700 dark:focus:ring-orange-800">Cadastrar novo tipo de sessão</button>
+            <input id="nativeColorPicker1" name="color" type="color" value="#4a5568" class="ml-2 w-10 h-14 border rounded-lg p-0 border-none bg-transparent cursor-pointer" />
+            <button type="submit" class="ml-2 text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-orange-600 dark:hover:bg-orange-700 dark:focus:ring-orange-800">Cadastrar novo tipo de sessão</button>
         </div>
     </form>
 
@@ -89,5 +89,15 @@
 </div>
 
 <x-Footer></x-Footer>
+
+<script>
+    const colorPicker = document.getElementById("nativeColorPicker1");
+    const changeColorBtn = document.getElementById("burronNativeColor");
+
+    changeColorBtn.style.backgroundColor = colorPicker.value;
+    colorPicker.addEventListener("input", () => {
+        changeColorBtn.style.backgroundColor = colorPicker.value;
+    });
+</script>
 </body>
 </html>

@@ -11,6 +11,8 @@ class SessionController extends Controller
 {
     public function store(Request $request)
     {
+        \Log::info("Dados recebidos no store: ", $request->all());
+
         $request->validate([
             'session_type' => 'required|string',
             'patient_ids' => 'required|string',
@@ -21,30 +23,24 @@ class SessionController extends Controller
 
         $psychologist = Auth::guard('psychologist')->user();
 
-        \Log::info("Guard utilizado: ", ['guard' => 'psychologist']);
-        \Log::info("Usuário autenticado: ", ['user' => $psychologist]);
-
         $startTime = Carbon::createFromFormat('H:i', $request->input('start_time'));
         $sessionTimeInMinutes = (int) $request->input('session_time');
         $endTime = $startTime->copy()->addMinutes($sessionTimeInMinutes);
 
+        $session = Session::create([
+            'psychologist_id' => $psychologist->id,
+            'session_type' => $request->input('session_type'), // Corrigido para adicionar o tipo de sessão
+            'date' => $request->input('date'),
+            'start_time' => $startTime->format('H:i'),
+            'end_time' => $endTime->format('H:i'),
+        ]);
+
         $patientIds = explode(',', $request->input('patient_ids'));
-
-        foreach ($patientIds as $patientId) {
-            Session::create([
-                'psychologist_id' => $psychologist->id,
-                'patient_id' => $patientId,
-                'session_type' => $request->input('session_type'),
-                'date' => $request->input('date'),
-                'start_time' => $startTime->format('H:i'),
-                'end_time' => $endTime->format('H:i'),
-            ]);
-
-            \Log::info("Sessão criada para paciente: ", ['patient_id' => $patientId]);
-        }
+        $session->patients()->attach($patientIds);
 
         return response()->json(['success' => true]);
     }
+
 
 
     public function update(Request $request, $id)
@@ -88,7 +84,7 @@ class SessionController extends Controller
 
         $sessions = Session::where('psychologist_id', $psychologist->id)
             ->where('date', $date)
-            ->with('patient')
+            ->with('patients', 'sessionType') // Carrega a relação com SessionType
             ->orderBy('start_time')
             ->get();
 
@@ -99,10 +95,14 @@ class SessionController extends Controller
                 'id' => $session->id,
                 'start_time' => Carbon::createFromFormat('H:i:s', $session->start_time)->format('H:i'),
                 'end_time' => Carbon::createFromFormat('H:i:s', $session->end_time)->format('H:i'),
-                'patient_name' => $session->patient->name,
-                'patient_phone' => $session->patient->number,
+                'patients' => $session->patients->map(function ($patient) {
+                    return [
+                        'name' => $patient->name,
+                        'phone' => $patient->number,
+                    ];
+                }),
                 'session_type' => $session->session_type,
-                'session_duration' => Carbon::createFromFormat('H:i:s', $session->start_time)->diffInMinutes(Carbon::createFromFormat('H:i:s', $session->end_time)),
+                'color' => $session->sessionType ? $session->sessionType->color : '#FFFFFF' // Inclui a cor do tipo de sessão, com fallback para branco
             ];
         });
 

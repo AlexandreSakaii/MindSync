@@ -11,11 +11,11 @@ class Session extends Model
 
     protected $fillable = [
         'psychologist_id',
-        'patient_id',
-        'session_type',
+        'session_type',  // Adiciona session_type aos campos fillable
         'date',
         'start_time',
         'end_time',
+        'status'
     ];
 
     public function psychologist()
@@ -23,8 +23,12 @@ class Session extends Model
         return $this->belongsTo(Psychologist::class);
     }
 
-    public function patient()
+    public function patients()
     {
-        return $this->belongsTo(Patient::class);
+        return $this->belongsToMany(Patient::class, 'session_patient');
+    }
+    public function sessionType()
+    {
+        return $this->belongsTo(SessionType::class, 'session_type', 'name');
     }
 }

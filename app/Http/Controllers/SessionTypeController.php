@@ -19,6 +19,7 @@ class SessionTypeController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'color' => 'required|string|max:7', // Valida a cor
         ]);
 
         $psychologist = Auth::guard('psychologist')->user();
@@ -26,6 +27,7 @@ class SessionTypeController extends Controller
         SessionType::create([
             'psychologist_id' => $psychologist->id,
             'name' => $request->input('name'),
+            'color' => $request->input('color'), // Salva a cor
         ]);
 
         return redirect()->back()->with('success', 'Tipo de sessão criado com sucesso.');
@@ -53,5 +55,4 @@ class SessionTypeController extends Controller
         $sessionTypes = SessionType::where('psychologist_id', $psychologist->id)->get();
         return view('Deshboard', compact('sessionTypes'));
     }
-
 }
